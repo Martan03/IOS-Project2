@@ -10,9 +10,15 @@
 #define MAX_TU ((size_t) 100)
 #define MAX_F ((size_t) 10000)
 
+/// @brief Parses number from string to size_t, checks max value
+/// @param str number in string
+/// @param out output size_t variable
+/// @param max max value of the number
+/// @return true on success, else false
 bool parse_number(char* str, size_t* out, size_t max);
 
 int main(int argc, char** argv) {
+    // Checks if all arguments were given
     if (argc != 6) {
         fprintf(stderr, "Error: invalid usage.\n");
         return 1;
@@ -46,12 +52,14 @@ int main(int argc, char** argv) {
 }
 
 bool parse_number(char* str, size_t* out, size_t max) {
+    // Removes whitespaces from beginning of the string
     while (isspace(*str))
         ++str;
 
     if (*str == 0 || str[0] == '-')
         return false;
 
+    // Converts string to size_t
     *out = strtoul(str, &str, 10);
 
     return *str == 0 && *out <= max;
