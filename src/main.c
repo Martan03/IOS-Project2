@@ -2,7 +2,13 @@
 #include <stdbool.h> // bool
 #include <inttypes.h> // SIZE_MAX
 #include <ctype.h> // isspace
-#include <stdlib.h> // strtoul
+#include <stdlib.h> // strtoul, rand
+#include <unistd.h> // fork, usleep
+#include <sys/types.h> // fork
+#include <sys/wait.h> // wait
+
+#include "shmem.h"
+#include "customer.h"
 
 #define MAX_NZ SIZE_MAX
 #define MAX_NU SIZE_MAX
@@ -18,6 +24,9 @@
 bool parse_number(char* str, size_t* out, size_t max);
 
 int main(int argc, char** argv) {
+    if (argc == 1)
+        shmem_close();
+
     // Checks if all arguments were given
     if (argc != 6) {
         fprintf(stderr, "Error: invalid usage.\n");
@@ -28,25 +37,60 @@ int main(int argc, char** argv) {
 
     // Checks if arguments are numbers in valid range
     if (!parse_number(argv[1], &nz, MAX_NZ)) {
-        fprintf(stderr, "Error: NZ must be an integer.\n");
+        fprintf(stderr, "Error: NZ must be an unsigned integer.\n");
         return 1;
     }
-    if (!parse_number(argv[1], &nu, MAX_NU)) {
-        fprintf(stderr, "Error: NU must be an integer.\n");
+    if (!parse_number(argv[2], &nu, MAX_NU)) {
+        fprintf(stderr, "Error: NU must be an unsigned integer.\n");
         return 1;
     }
-    if (!parse_number(argv[1], &tz, MAX_TZ)) {
-        fprintf(stderr, "Error: TZ must be integer less than %zu.\n", MAX_TZ);
+    if (!parse_number(argv[3], &tz, MAX_TZ)) {
+        fprintf(stderr, "Error: TZ must be unsigned integer less than %zu.\n", MAX_TZ);
         return 1;
     }
-    if (!parse_number(argv[1], &tu, MAX_TU)) {
-        fprintf(stderr, "Error: TZ must be integer less than %zu.\n", MAX_TU);
+    if (!parse_number(argv[4], &tu, MAX_TU)) {
+        fprintf(stderr, "Error: TZ must be unsigned integer less than %zu.\n", MAX_TU);
         return 1;
     }
-    if (!parse_number(argv[1], &f, MAX_F)) {
-        fprintf(stderr, "Error: TZ must be integer less than %zu.\n", MAX_F);
+    if (!parse_number(argv[5], &f, MAX_F)) {
+        fprintf(stderr, "Error: TZ must be unsigned integer less than %zu.\n", MAX_F);
         return 1;
     }
+
+    if (!shmem_open(nz)) {
+        return 1;
+    }
+
+    // Creates customers processes
+    for (size_t i = 1; i <= nz; ++i) {
+        if (fork() == 0)
+            return customer(i, tz);
+    }
+
+    /*
+    // Creates post officials processes
+    for (size_t i = 1; i <= nu; ++i) {
+        if (fork() == 0)
+            return 1;
+    }
+    */
+
+    // Waits for random time between f and f / 2 in microseconds
+    f *= 1000;
+    int interval = f - f / 2;
+    int rnd = rand() % interval + f / 2;
+    usleep(rnd);
+
+    // Closes post
+    close_post();
+    printf("Closing\n");
+
+    int status = -1;
+
+    for (size_t i = 0; i < nz; ++i)
+        wait(&status);
+
+    shmem_close();
 
     return 0;
 }
