@@ -6,7 +6,7 @@
 #include "customer.h"
 #include "logger.h"
 
-#define QNUM 3
+#define QSIZE 3
 
 int customer(size_t id, size_t tz) {
     print_log("Z %zu: started\n", id);
@@ -21,7 +21,7 @@ int customer(size_t id, size_t tz) {
         return 1;
     }
 
-    rnd = rand() % QNUM + 1;
+    rnd = rand() % QSIZE + 1;
     print_log("Z %zu: entering office for a service %d\n", id, rnd);
 
     return 0;

@@ -9,6 +9,7 @@
 
 #include "shmem.h"
 #include "customer.h"
+#include "fifo.h"
 
 #define MAX_NZ SIZE_MAX
 #define MAX_NU SIZE_MAX
@@ -58,6 +59,7 @@ int main(int argc, char** argv) {
     }
 
     if (!shmem_open(nz)) {
+        fprintf(stderr, "Error: creating shared memory\n");
         return 1;
     }
 
