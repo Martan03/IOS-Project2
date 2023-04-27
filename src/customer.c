@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h> // usleep
 #include <time.h>
+#include <sys/types.h>
 
 #include "customer.h"
 #include "logger.h"
@@ -21,8 +22,9 @@ int customer(size_t id, size_t tz) {
         return 1;
     }
 
-    rnd = rand() % QSIZE + 1;
-    print_log("Z %zu: entering office for a service %d\n", id, rnd);
+    rnd = rand() % QSIZE;
+    print_log("Z %zu: entering office for a service %d\n", id, rnd + 1);
+    queue_enter(rnd, getpid());
 
     return 0;
 }

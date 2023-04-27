@@ -9,7 +9,6 @@
 
 #include "shmem.h"
 #include "customer.h"
-#include "fifo.h"
 
 #define MAX_NZ SIZE_MAX
 #define MAX_NU SIZE_MAX
