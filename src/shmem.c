@@ -74,11 +74,22 @@ void queue_enter(size_t q, pid_t id) {
     sem_post(&data->queue_sem[q]);
 }
 
+queue_t* get_queue(size_t q) {
+    sem_wait(&data->queue_sem[q]);
+    return &queue[q];
+}
+
+void rel_queue(size_t q) {
+    sem_post(&data->queue_sem[q]);
+}
+
 bool is_open() {
     return data->opened;
 }
 
 void close_post() {
+
+
     data->opened = false;
 }
 

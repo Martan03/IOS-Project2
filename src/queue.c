@@ -14,3 +14,7 @@ pid_t queue_pop(queue_t* queue) {
 
     return item;
 }
+
+int queue_empty(queue_t* queue) {
+    return queue->info->start == queue->info->end;
+}

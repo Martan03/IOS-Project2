@@ -9,6 +9,7 @@
 
 #include "shmem.h"
 #include "customer.h"
+#include "worker.h"
 
 #define MAX_NZ SIZE_MAX
 #define MAX_NU SIZE_MAX
@@ -68,13 +69,11 @@ int main(int argc, char** argv) {
             return customer(i, tz);
     }
 
-    /*
-    // Creates post officials processes
+    // Creates workers processes
     for (size_t i = 1; i <= nu; ++i) {
         if (fork() == 0)
-            return 1;
+            return worker(i, tu);
     }
-    */
 
     // Waits for random time between f and f / 2 in microseconds
     f *= 1000;
@@ -88,9 +87,10 @@ int main(int argc, char** argv) {
 
     int status = -1;
 
-    for (size_t i = 0; i < nz; ++i)
-        wait(&status);
+    while (wait(&status) != -1)
+        ;
 
+    destroy_queue_sem();
     shmem_close();
 
     return 0;

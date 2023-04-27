@@ -3,11 +3,10 @@
 #include <unistd.h> // usleep
 #include <time.h>
 #include <sys/types.h>
+#include <signal.h> // sigwait
 
 #include "customer.h"
 #include "logger.h"
-
-#define QSIZE 3
 
 int customer(size_t id, size_t tz) {
     print_log("Z %zu: started\n", id);
@@ -19,12 +18,30 @@ int customer(size_t id, size_t tz) {
 
     if (!is_open()) {
         print_log("Z %zu: going home\n", id);
-        return 1;
+        return 0;
     }
 
     rnd = rand() % QSIZE;
     print_log("Z %zu: entering office for a service %d\n", id, rnd + 1);
     queue_enter(rnd, getpid());
+
+    sigset_t set;
+    int sig;
+
+    sigemptyset(&set);
+    sigaddset(&set, SIGUSR1);
+
+    sig = pthread_sigmask(SIG_BLOCK, &set, NULL);
+    if (sig != 0) {
+        return 1;
+    }
+
+    sigwait(&set, &sig);
+    
+    print_log("Z %zu: called by office worker\n", id);
+    rnd = rand() % 10 * 1000;
+    usleep(rnd);
+    print_log("Z %zu: going home\n", id);
 
     return 0;
 }

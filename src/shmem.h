@@ -40,6 +40,15 @@ void rel_log_num();
 /// @param id id of the customer
 void queue_enter(size_t q, pid_t id);
 
+/// @brief Gets queue on given index and locks queue semaphore
+/// @param q index of semaphore
+/// @return queue on given index
+queue_t* get_queue(size_t q);
+
+/// @brief Releases queue semaphore
+/// @param q index of semaphore
+void rel_queue(size_t q);
+
 /// @brief Checks if post is opened
 /// @return true if opened, else false
 bool is_open();

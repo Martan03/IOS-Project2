@@ -18,11 +18,16 @@ typedef struct {
 /// @brief Pushes item to the queue
 /// @param queue queue struct
 /// @param id data to be pushed
-void queue_push(queue_t* fifo, pid_t id);
+void queue_push(queue_t* queue, pid_t id);
 
 /// @brief Pops item from the queue
 /// @param queue queue struct
 /// @return poppped item
-pid_t queue_pop(queue_t* fifo);
+pid_t queue_pop(queue_t* queue);
+
+/// @brief Checks if queue is empty
+/// @param queue queue to be checked
+/// @return true if empty, else false
+int queue_empty(queue_t* queue);
 
 #endif // QUEUE_INCLUDED
