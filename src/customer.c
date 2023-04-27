@@ -5,43 +5,45 @@
 #include <sys/types.h>
 #include <signal.h> // sigwait
 
-#include "customer.h"
-#include "logger.h"
+#include "person.h"
+#include "printer.h"
 
 int customer(size_t id, size_t tz) {
-    print_log("Z %zu: started\n", id);
+    plog("Z %zu: started\n", id);
 
     // Random wait time till customer enters post
     srand(time(NULL) + id);
-    size_t rnd = rand() % tz * 1000;
-    usleep(rnd);
+    person_wait(0, tz);
 
+    // Goes home if post is closed
     if (!is_open()) {
-        print_log("Z %zu: going home\n", id);
-        return 0;
+        plog("Z %zu: going home\n", id);
+        return true;
     }
 
-    rnd = rand() % QSIZE;
-    print_log("Z %zu: entering office for a service %d\n", id, rnd + 1);
+    // Enters random queue
+    size_t rnd = rand() % QSIZE;
+    plog("Z %zu: entering office for a service %d\n", id, rnd + 1);
     queue_enter(rnd, getpid());
 
+    // Waits for signal by worker
     sigset_t set;
     int sig;
 
     sigemptyset(&set);
     sigaddset(&set, SIGUSR1);
-
     sig = pthread_sigmask(SIG_BLOCK, &set, NULL);
     if (sig != 0) {
-        return 1;
+        perr("received invalid signal.\n");
+        return false;
     }
 
     sigwait(&set, &sig);
     
-    print_log("Z %zu: called by office worker\n", id);
-    rnd = rand() % 10 * 1000;
-    usleep(rnd);
-    print_log("Z %zu: going home\n", id);
+    // Goes to office worker and then goes home
+    plog("Z %zu: called by office worker\n", id);
+    person_wait(0, 10);
+    plog("Z %zu: going home\n", id);
 
-    return 0;
+    return true;
 }

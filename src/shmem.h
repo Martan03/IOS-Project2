@@ -27,7 +27,7 @@ bool shmem_open(size_t nz);
 
 /// @brief Initiliazes shared memory
 /// @return true on success, else false
-bool shmem_init();
+bool shmem_init(size_t nz);
 
 /// @brief Gets log number and locks log_num_sem semaphore
 /// @return log number
