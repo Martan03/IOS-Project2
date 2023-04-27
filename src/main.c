@@ -9,6 +9,7 @@
 
 #include "shmem.h"
 #include "customer.h"
+#include "logger.h"
 #include "worker.h"
 
 #define MAX_NZ SIZE_MAX
@@ -83,10 +84,9 @@ int main(int argc, char** argv) {
 
     // Closes post
     close_post();
-    printf("Closing\n");
+    print_log("closing\n");
 
     int status = -1;
-
     while (wait(&status) != -1)
         ;
 

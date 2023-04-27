@@ -6,6 +6,7 @@
 #include <fcntl.h> // shm
 #include <semaphore.h> // semaphore
 #include <stdbool.h> // bool
+#include <signal.h>
 
 #include "queue.h"
 

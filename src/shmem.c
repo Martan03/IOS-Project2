@@ -17,7 +17,8 @@ bool shmem_open(size_t nz) {
     }
 
     // Truncates shared memory
-    size_t size = sizeof(shmem_data) + QSIZE * nz;
+    ++nz;
+    size_t size = sizeof(shmem_data) + QSIZE * nz * sizeof(pid_t);
     if (ftruncate(fd, size) == -1) {
         close(fd);
         return false;
@@ -35,7 +36,7 @@ bool shmem_open(size_t nz) {
 bool shmem_init(size_t nz) {
     // Initializes queues
     for (size_t i = 0; i < QSIZE; ++i) {
-        queue[i].data = (pid_t*) ((char*) data + sizeof(*data) + QSIZE * nz);
+        queue[i].data = (pid_t*) ((char*) data + sizeof(*data) + i * nz * sizeof(pid_t));
         data->queue_info[i].start = 0;
         data->queue_info[i].end = 0;
         data->queue_info[i].size = nz;
@@ -88,8 +89,6 @@ bool is_open() {
 }
 
 void close_post() {
-
-
     data->opened = false;
 }
 
