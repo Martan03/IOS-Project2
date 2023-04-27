@@ -13,7 +13,6 @@ ROBJ:=$(patsubst src/%.c, obj/release/%.o, $(SRC))
 
 .PHONY: debug
 .PHONY: release
-.PHONY: install
 .PHONY: clean
 .PHONY: rel
 .PHONY: deb
@@ -40,9 +39,6 @@ obj/release/%.o: src/%.c
 
 obj/debug/%.o: src/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
-
-install:
-	sudo cp -i $(TARGET) /bin/target
 
 clean:
 	rm obj/debug/*.o || true
