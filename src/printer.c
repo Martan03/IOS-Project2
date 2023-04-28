@@ -9,6 +9,10 @@
 #include "printer.h"
 #include "shmem.h"
 
+#define logname "proj2.out"
+
+FILE* f;
+
 int perr(const char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
@@ -20,7 +24,6 @@ int perr(const char* fmt, ...) {
 }
 
 void plog(const char* fmt, ...) {
-    FILE *f = stderr;
     size_t* num = get_log_num();
 
     va_list args;
@@ -29,6 +32,17 @@ void plog(const char* fmt, ...) {
     vfprintf(f, fmt, args);
     va_end(args);
 
+    fflush(f);
+
     ++*num;
     rel_log_num();
+}
+
+int open_log_file() {
+    f = fopen(logname, "w");
+    return f == NULL;
+}
+
+void close_log_file() {
+    fclose(f);
 }

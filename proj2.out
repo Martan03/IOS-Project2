@@ -1,0 +1,109 @@
+1: Z 1: started
+2: Z 2: started
+3: Z 3: started
+4: Z 4: started
+5: Z 5: started
+6: Z 6: started
+7: Z 7: started
+8: Z 8: started
+9: Z 7: entering office for a service 3
+10: Z 9: started
+11: Z 10: started
+12: U 1: started
+13: U 1: serving a service of type 3
+14: Z 7: called by office worker
+15: U 2: started
+16: U 2: taking break
+17: Z 6: entering office for a service 2
+18: Z 1: entering office for a service 3
+19: U 3: started
+20: U 3: serving a service of type 2
+21: U 4: started
+22: Z 6: called by office worker
+23: U 4: serving a service of type 3
+24: Z 1: called by office worker
+25: U 5: started
+26: U 5: taking break
+27: U 6: started
+28: Z 5: entering office for a service 3
+29: U 6: serving a service of type 3
+30: Z 5: called by office worker
+31: U 7: started
+32: U 7: taking break
+33: U 8: started
+34: U 8: taking break
+35: U 9: started
+36: U 9: taking break
+37: U 10: started
+38: U 10: taking break
+39: Z 4: entering office for a service 1
+40: Z 3: entering office for a service 1
+41: U 5: break finished
+42: U 5: serving a service of type 1
+43: Z 4: called by office worker
+44: Z 10: entering office for a service 1
+45: Z 1: going home
+46: U 7: break finished
+47: U 7: serving a service of type 1
+48: Z 3: called by office worker
+49: U 3: service finished
+50: U 3: serving a service of type 1
+51: Z 10: called by office worker
+52: Z 8: entering office for a service 3
+53: Z 10: going home
+54: U 5: service finished
+55: U 5: serving a service of type 3
+56: Z 8: called by office worker
+57: U 6: service finished
+58: U 6: taking break
+59: U 4: service finished
+60: U 4: taking break
+61: Z 6: going home
+62: Z 5: going home
+63: Z 2: entering office for a service 3
+64: Z 9: entering office for a service 2
+65: U 10: break finished
+66: U 10: serving a service of type 3
+67: Z 2: called by office worker
+68: Z 8: going home
+69: Z 3: going home
+70: U 9: break finished
+71: U 9: serving a service of type 2
+72: Z 9: called by office worker
+73: U 3: service finished
+74: U 3: taking break
+75: U 2: break finished
+76: U 2: taking break
+77: Z 7: going home
+78: U 1: service finished
+79: U 1: taking break
+80: U 3: break finished
+81: U 3: taking break
+82: U 8: break finished
+83: U 8: taking break
+84: U 5: service finished
+85: U 5: taking break
+86: Z 4: going home
+87: closing
+88: U 2: break finished
+89: U 2: going home
+90: U 6: break finished
+91: U 6: going home
+92: U 7: service finished
+93: U 7: going home
+94: U 9: service finished
+95: U 9: going home
+96: U 5: break finished
+97: U 5: going home
+98: U 1: break finished
+99: U 1: going home
+100: U 10: service finished
+101: U 10: going home
+102: Z 9: going home
+103: U 4: break finished
+104: U 4: going home
+105: U 8: break finished
+106: U 8: going home
+107: U 3: break finished
+108: U 3: going home
+109: Z 2: going home

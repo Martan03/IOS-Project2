@@ -61,9 +61,12 @@ int main(int argc, char** argv) {
     }
 
     // Opens memory
-    if (!shmem_open(nz)) {
-        return perr("creating shared memory.\n");
-    }
+    if (shmem_open(nz))
+        return 1;
+        
+    // Opens log file
+    if (open_log_file())
+        return perr("opening log file\n");
 
     // Creates all processes
     for (size_t i = 1; i <= nz; ++i) {
@@ -90,6 +93,7 @@ int main(int argc, char** argv) {
     // Destroys semaphores and closes shared memory
     destroy_queue_sem();
     shmem_close();
+    close_log_file();
 
     return 0;
 }

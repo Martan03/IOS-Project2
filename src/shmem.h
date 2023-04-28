@@ -22,19 +22,19 @@ typedef struct {
 
 /// @brief Openes and initializes shared memory
 /// @param nz number of customers
-/// @return true on success, else false
-bool shmem_open(size_t nz);
+/// @return 0 on success, else 1
+int shmem_open(size_t nz);
 
 /// @brief Initiliazes shared memory
-/// @return true on success, else false
-bool shmem_init(size_t nz);
+/// @return 0 on success, else 1
+int shmem_init(size_t nz);
 
 /// @brief Gets log number and locks log_num_sem semaphore
 /// @return log number
-size_t* get_log_num();
+size_t* get_log_num(void);
 
 /// @brief Releases log_num_sem semaphore
-void rel_log_num();
+void rel_log_num(void);
 
 /// @brief Adds customer to the queue
 /// @param q queue id
@@ -52,16 +52,16 @@ void rel_queue(size_t q);
 
 /// @brief Checks if post is opened
 /// @return true if opened, else false
-bool is_open();
+bool is_open(void);
 
 /// @brief Closes post
-void close_post();
+void close_post(void);
 
 /// @brief Closes shared memory, destroys semaphores
-void shmem_close();
+void shmem_close(void);
 
 /// @brief Destroys queue semaphores
-void destroy_queue_sem();
+void destroy_queue_sem(void);
 
 /// @brief Destroys first n queue semaphores
 /// @param n number to destroy semaphores to

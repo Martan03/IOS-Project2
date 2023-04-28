@@ -17,4 +17,11 @@ int perr(const char* fmt, ...);
 /// @param variables to insert to fmt string
 void plog(const char* fmt, ...);
 
+/// @brief Opens file for printing log
+/// @return 0 on success, else 1
+int open_log_file();
+
+/// @brief Closes log file
+void close_log_file();
+
 #endif // PRINTER_INCLUDED
