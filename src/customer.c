@@ -18,7 +18,7 @@ int customer(size_t id, size_t tz) {
     // Goes home if post is closed
     if (!is_open()) {
         plog("Z %zu: going home\n", id);
-        return true;
+        return 0;
     }
 
     // Enters random queue
@@ -35,7 +35,7 @@ int customer(size_t id, size_t tz) {
     sig = pthread_sigmask(SIG_BLOCK, &set, NULL);
     if (sig != 0) {
         perr("received invalid signal.\n");
-        return false;
+        return 1;
     }
 
     sigwait(&set, &sig);
@@ -45,5 +45,5 @@ int customer(size_t id, size_t tz) {
     person_wait(0, 10);
     plog("Z %zu: going home\n", id);
 
-    return true;
+    return 0;
 }

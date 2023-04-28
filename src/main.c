@@ -14,6 +14,9 @@
 #define MAX_TU ((size_t) 100)
 #define MAX_F ((size_t) 10000)
 
+/// @brief Waits for all processes to end
+void wait_for_end();
+
 /// @brief Prints help
 /// @return 0
 int help();
@@ -63,19 +66,26 @@ int main(int argc, char** argv) {
     // Opens memory
     if (shmem_open(nz))
         return 1;
-        
+
     // Opens log file
     if (open_log_file())
         return perr("opening log file\n");
 
-    // Creates all processes
+    // Creates worker processes
+    for (size_t i = 1; i <= nu; ++i) {
+        pid_t fid = fork();
+        if (fid == 0)
+            return worker(i, tu);
+        else if (fid == -1) {
+            perr("creating fork. Go home everyone!\n");
+            close_post();
+            wait_for_end();
+        }
+    }
+    // Creates customer processes
     for (size_t i = 1; i <= nz; ++i) {
         if (fork() == 0)
             return customer(i, tz);
-    }
-    for (size_t i = 1; i <= nu; ++i) {
-        if (fork() == 0)
-            return worker(i, tu);
     }
 
     // Waits for random time between f and f / 2 in microseconds
@@ -85,6 +95,12 @@ int main(int argc, char** argv) {
     close_post();
     plog("closing\n");
 
+    wait_for_end();
+
+    return 0;
+}
+
+void wait_for_end() {
     // Waits for all child processes
     int status = -1;
     while (wait(&status) != -1)
@@ -94,8 +110,6 @@ int main(int argc, char** argv) {
     destroy_queue_sem();
     shmem_close();
     close_log_file();
-
-    return 0;
 }
 
 int help() {

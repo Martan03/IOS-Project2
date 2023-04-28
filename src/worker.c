@@ -47,4 +47,5 @@ int worker(size_t id, size_t tu) {
         person_wait(0, 10);
         plog("U %zu: service finished\n", id);
     }
+    return 1;
 }
