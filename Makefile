@@ -1,46 +1,31 @@
 CC:=cc
 TARGET:=proj2
 CFLAGS:=-g -Wall -Wextra -Werror -pedantic -std=gnu99 -pthread
-RFLAGS:=-std=c17 -DNDEBUG -O3
 
 SRC:=$(wildcard src/*.c)
-DOBJ:=$(patsubst src/%.c, obj/debug/%.o, $(SRC))
-ROBJ:=$(patsubst src/%.c, obj/release/%.o, $(SRC))
+DOBJ:=$(patsubst src/%.c, obj/%.o, $(SRC))
 
 -include dep.d
 
 .DEFAULT_GOAL:=debug
 
-.PHONY: debug
-.PHONY: release
-.PHONY: clean
-.PHONY: rel
-.PHONY: deb
+.PHONY: debug clean deb pack
 
 
 debug:
 	mkdir -p obj/debug
-	clang -MM $(SRC) | sed -r 's/^.*:.*$$/obj\/debug\/\0/' > dep.d
+	clang -MM $(SRC) | sed -r 's/^.*:.*$$/obj\/\0/' > dep.d
 	make deb
 
-release:
-	mkdir -p obj/release
-	clang -MM $(SRC) | sed -r 's/^.*:.*$$/obj\/release\/\0/' > dep.d
-	make rel
-
 deb: $(DOBJ)
-	$(CC) $(CFLAGS) $^ -o $(TARGET)
+	$(CC) $(CFLAGS) -lrt $^ -o $(TARGET)
 
-rel: $(ROBJ)
-	$(CC) $(RFLAGS) $^ -o $(TARGET)
-
-obj/release/%.o: src/%.c
-	$(CC) $(RFLAGS) -c -o $@ $<
-
-obj/debug/%.o: src/%.c
+obj/%.o: src/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 clean:
-	rm obj/debug/*.o || true
-	rm obj/release/*.o || true
+	rm obj/*.o || true
 	rm $(TARGET) || true
+
+pack:
+	zip xsleza26.zip src/* Makefile
