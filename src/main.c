@@ -14,12 +14,15 @@
 #define MAX_TU ((size_t) 100)
 #define MAX_F ((size_t) 10000)
 
+/// @brief Closes all customers waiting in queue
+void kill_customers(void);
+
 /// @brief Waits for all processes to end
-void wait_for_end();
+void wait_for_end(void);
 
 /// @brief Prints help
 /// @return 0
-int help();
+int help(void);
 
 /// @brief Parses number from string to size_t, checks max value
 /// @param str number in string
@@ -48,19 +51,19 @@ int main(int argc, char** argv) {
 
     // Checks if arguments are numbers in valid range
     if (!parse_number(argv[1], &nz, MAX_NZ)) {
-        return perr("NZ must be positive integer.\n");
+        return perr("NZ must be non-negative integer.\n");
     }
-    if (!parse_number(argv[2], &nu, MAX_NU)) {
+    if (!parse_number(argv[2], &nu, MAX_NU) || nu == 0) {
         return perr("NU must be positive integer.\n");
     }
     if (!parse_number(argv[3], &tz, MAX_TZ)) {
-        return perr("TZ must be positive integer less than %zu.\n", MAX_TZ);
+        return perr("TZ must be integer in range 0-%zu.\n", MAX_TZ);
     }
     if (!parse_number(argv[4], &tu, MAX_TU)) {
-        return perr("TU must be positive integer less than %zu.\n", MAX_TU);
+        return perr("TU must be integer in range 0-%zu.\n", MAX_TU);
     }
     if (!parse_number(argv[5], &f, MAX_F)) {
-        return perr("F must be positive integer less than %zu.\n, MAX_F");
+        return perr("F must be integer in range 0-%zu.\n, MAX_F");
     }
 
     // Opens memory
@@ -84,8 +87,15 @@ int main(int argc, char** argv) {
     }
     // Creates customer processes
     for (size_t i = 1; i <= nz; ++i) {
-        if (fork() == 0)
+        pid_t fid = fork();
+        if (fid == 0)
             return customer(i, tz);
+        else if (fid == -1) {
+            kill_customers();
+            perr("creating fork. Go home everyone!\n");
+            close_post();
+            wait_for_end();
+        }
     }
 
     // Waits for random time between f and f / 2 in microseconds
@@ -100,7 +110,18 @@ int main(int argc, char** argv) {
     return 0;
 }
 
-void wait_for_end() {
+void kill_customers(void) {
+    for (size_t i = 0; i < QSIZE; ++i) {
+        queue_t* queue = get_queue(i);
+        while (!queue_empty(queue)) {
+            pid_t pid = queue_pop(queue);
+            kill(pid, SIGKILL);
+        }
+        rel_queue(i);
+    }
+}
+
+void wait_for_end(void) {
     // Waits for all child processes
     int status = -1;
     while (wait(&status) != -1)
@@ -112,7 +133,7 @@ void wait_for_end() {
     close_log_file();
 }
 
-int help() {
+int help(void) {
     printf("Welcome in proj2 (second project for IOS)!\n\n"
            "Usage: ./proj2 NZ NU TZ TZ F\n"
            "  NZ: number of customers\n"

@@ -19,9 +19,9 @@ void plog(const char* fmt, ...);
 
 /// @brief Opens file for printing log
 /// @return 0 on success, else 1
-int open_log_file();
+int open_log_file(void);
 
 /// @brief Closes log file
-void close_log_file();
+void close_log_file(void);
 
 #endif // PRINTER_INCLUDED

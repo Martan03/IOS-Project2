@@ -1,6 +1,6 @@
 CC:=cc
-TARGET:=main
-CFLAGS:=-g -Wall -std=gnu99 -fsanitize=address -pthread
+TARGET:=proj2
+CFLAGS:=-g -Wall -Wextra -Werror -pedantic -std=gnu99 -pthread
 RFLAGS:=-std=c17 -DNDEBUG -O3
 
 SRC:=$(wildcard src/*.c)

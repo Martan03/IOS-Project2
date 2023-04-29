@@ -38,11 +38,11 @@ void plog(const char* fmt, ...) {
     rel_log_num();
 }
 
-int open_log_file() {
+int open_log_file(void) {
     f = fopen(logname, "w");
     return f == NULL;
 }
 
-void close_log_file() {
+void close_log_file(void) {
     fclose(f);
 }

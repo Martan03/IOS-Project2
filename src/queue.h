@@ -27,7 +27,7 @@ pid_t queue_pop(queue_t* queue);
 
 /// @brief Checks if queue is empty
 /// @param queue queue to be checked
-/// @return true if empty, else false
+/// @return 1 if empty, 0 false
 int queue_empty(queue_t* queue);
 
 #endif // QUEUE_INCLUDED
