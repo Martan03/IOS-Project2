@@ -80,9 +80,9 @@ int main(int argc, char** argv) {
         if (fid == 0)
             return worker(i, tu);
         else if (fid == -1) {
-            perr("creating fork. Go home everyone!\n");
             close_post();
             wait_for_end();
+            return perr("creating worker fork (#%zu).\n", i);
         }
     }
     // Creates customer processes
@@ -92,9 +92,10 @@ int main(int argc, char** argv) {
             return customer(i, tz);
         else if (fid == -1) {
             kill_customers();
-            perr("creating fork. Go home everyone!\n");
             close_post();
             wait_for_end();
+            return
+                perr("creating customer fork (#%zu).\n", i);
         }
     }
 
