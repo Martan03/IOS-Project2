@@ -74,17 +74,6 @@ int main(int argc, char** argv) {
     if (open_log_file())
         return perr("opening log file\n");
 
-    // Creates worker processes
-    for (size_t i = 1; i <= nu; ++i) {
-        pid_t fid = fork();
-        if (fid == 0)
-            return worker(i, tu);
-        else if (fid == -1) {
-            close_post();
-            wait_for_end();
-            return perr("creating worker fork (#%zu).\n", i);
-        }
-    }
     // Creates customer processes
     for (size_t i = 1; i <= nz; ++i) {
         pid_t fid = fork();
@@ -96,6 +85,17 @@ int main(int argc, char** argv) {
             wait_for_end();
             return
                 perr("creating customer fork (#%zu).\n", i);
+        }
+    }
+    // Creates worker processes
+    for (size_t i = 1; i <= nu; ++i) {
+        pid_t fid = fork();
+        if (fid == 0)
+            return worker(i, tu);
+        else if (fid == -1) {
+            close_post();
+            wait_for_end();
+            return perr("creating worker fork (#%zu).\n", i);
         }
     }
 

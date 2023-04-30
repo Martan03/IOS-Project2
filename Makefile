@@ -1,6 +1,6 @@
 CC:=cc
 TARGET:=proj2
-CFLAGS:=-g -Wall -Wextra -Werror -pedantic -std=gnu99 -pthread
+CFLAGS:=-g -Wall -Wextra -Werror -pedantic -std=gnu99
 
 SRC:=$(wildcard src/*.c)
 DOBJ:=$(patsubst src/%.c, obj/%.o, $(SRC))
@@ -18,7 +18,7 @@ debug:
 	make deb
 
 deb: $(DOBJ)
-	$(CC) $(CFLAGS) -lrt $^ -o $(TARGET)
+	$(CC) $(CFLAGS) -lrt -pthread $^ -o $(TARGET)
 
 obj/%.o: src/%.c
 	$(CC) $(CFLAGS) -c -o $@ $<
